@@ -199,15 +199,17 @@ function renderTable(){
     currentUserExp.map(val=>{
         const {expID, des, amount, cat, date} = val
         table.innerHTML += `
-         <th class="table-data">${expID}</th>
-<th class="table-data"> ${des}</th>
-<th class="table-data"> ${amount}</th>
-<th class="table-data"> ${cat}</th>
-<th class="table-data"> ${date}</th>
-<th class="text-center ">
-    <button type="button" class="btn btn-success " id="${expID}" onclick="editExpense(this.id)">Edit</button>
+        <tr>
+         <td class="table-data">${expID}</td>
+<td class="table-data"> ${des}</td>
+<td class="table-data"> ${amount}</td>
+<td class="table-data"> ${cat}</td>
+<td class="table-data"> ${date}</td>
+<td class="text-center ">
+    <button type="button" class="btn btn-success " id="${expID}" onclick="uptadeExpense(this.id)">Edit</button>
     <button type="button" class="btn btn-danger " id="${expID}" onclick="deleteExpense(this.id)">Delete</button>    
-</th> 
+</td> 
+</tr>
         `
     })
     }
@@ -217,11 +219,32 @@ function renderUserName(){
     document.getElementById("welcome").innerHTML = `Welcome ${currentUser.userName}`
 }
 
-function editExpense(id){
-    console.log(id)
+function uptadeExpense(currentExpID){
+    let allExpenses = JSON.parse(localStorage.getItem("allExpenses")) 
+    let currentExpObj = allExpenses.find(i=> i.expID == currentExpID)
+    console.log('currentExpObj: ', currentExpObj);
+    
+    let index = allExpenses.findIndex(i=> i.expID == currentExpID)
+    
+    // window.location = "addExp.html"
+
+    let p = document.getElementById('des')
+    console.log('p: ', p);
+    // document.getElementById('des').value = currentExpObj.des
+    // console.log('currentExpObj.des: ', currentExpObj.des);
+    // document.getElementById('amount').value = currentExpObj.amount
+    // document.getElementById('cat').value = currentExpObj.cat
 
 }
 
-function deleteExpense(expID){
+function deleteExpense(currentExpID){
+    let allExpenses = JSON.parse(localStorage.getItem("allExpenses")) 
+    let index = allExpenses.findIndex(i=> i.expID == currentExpID)
+    allExpenses.splice(index, 1);
 
+    if(index !== -1){
+        let updatedExpenses = JSON.stringify(allExpenses)
+        localStorage.setItem("allExpenses", updatedExpenses)
+        location.reload()
+    }
 }
