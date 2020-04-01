@@ -9,10 +9,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="renderUserName()">
 <div class="container-fluid pb-4 pt-3 bg-primary  text-white font-weight-bolder" >
-    <span class="pt-2" >Welcome</span>
-    <button type="button" class="btn btn-danger float-right">Logout</button>
+    <span class="pt-2" id="welcome"></span>
+    <button type="button" class="btn btn-danger float-right" onclick="logout()">Logout</button>
 </div>
     <div class="container-fluid p-5 mx-auto bg-primary text-white text-center">
     <button type="button" class="btn btn-danger m-0"><a href="./main.html" class="text-white">Back to Dashboard</a></button>

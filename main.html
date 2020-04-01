@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" >
+<head >
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -14,9 +14,9 @@
         }
     </style>
 </head>
-<body onload="renderTable()">
+<body onload="renderTable(); renderUserName()">
 <div class="container-fluid pb-4 pt-3 bg-primary  text-white font-weight-bolder" >
-    <span class="pt-2" >Welcome</span>
+    <span class="pt-2" id="welcome" ></span>
     <button type="button" class="btn btn-danger float-right" onclick="logout()">Logout</button>
 </div>
     <div class="container-fluid p-5 mx-auto bg-primary text-white text-center">
