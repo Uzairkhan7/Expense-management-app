@@ -73,7 +73,7 @@ function signIn(){
     
     let sEmail = document.getElementById("sEmail").value;
     let sPwd = document.getElementById("sPwd").value;
-    if (sEmail == "" || spwd == "") {
+    if (sEmail == "" || sPwd == "") {
         return swal("Please Fill up all the required Fields !", "")
         
     }
