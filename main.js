@@ -343,8 +343,12 @@ function editExpense(){
 
 function deleteExpense(currentExpID){
     currentExpID = parseInt(currentExpID)
+    console.log('currentExpID: ', currentExpID);
     let allExpenses = JSON.parse(localStorage.getItem("allExpenses")) 
     let updatedExp = allExpenses.filter(v => v.expID !== currentExpID )
+    localStorage.setItem("allExpenses", JSON.stringify(updatedExp) )
+    location.reload()
+    
 
     // localStorage.setItem("allExpenses", JSON.stringify(updatedExp) )
     // let index = allExpenses.findIndex(i=> i.expID == currentExpID)
