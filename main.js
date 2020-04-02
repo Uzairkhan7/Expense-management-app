@@ -1,7 +1,22 @@
 //sign up
 let allUsers    
 
+function search(value){
+    let allExpenses = JSON.parse(localStorage.getItem("allExpenses"))
 
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    let currentUserExp = allExpenses.filter(a=> currentUser.userID == a.userID)
+    let filteredArr = currentUserExp.filter(v=> v.cat.toLowerCase().includes(value.toLowerCase()))
+    let arrLength = filteredArr.length
+    if (arrLength == 0) {
+    document.getElementById("tableData").innerText = "";
+    document.getElementById("errMsg").innerText = "Category does not exist with this keyword !";
+    }else{
+    document.getElementById("errMsg").innerText = "";
+    document.getElementById("tableData").innerText = "";
+    renderTable(filteredArr)
+}
+}
 
 function signup(){
     
@@ -11,7 +26,8 @@ function signup(){
     let userID = Math.floor(Math.random()*100000)
 
     if(userName === "" || email === "" || pasword ===""){
-        return alert("Please fill all the required Fields Properly !")
+        return swal("Please Fill up all the required Fields !", "");
+
     }
     
     let user = {
@@ -33,7 +49,8 @@ function signup(){
         
         console.log("if");
     }else{
-       return alert("User already registered with this Email")
+        return  swal("User already registered with this Email" , "", "error")
+        
     }
         
     }else{
@@ -43,11 +60,12 @@ function signup(){
         console.log("else");  
         console.log("else");
     }
-    
+    document.getElementById("usr").value = ""
+     document.getElementById("email").value = ""
+     document.getElementById("pwd").value = ""
     console.log('allUsers: ', allUsers);
     // console.log('user: ', user);
-    console.log("Signup Successful");
-    
+    swal("Signed up Successfully !" , "", "success");    
 }
 // login
 
@@ -55,12 +73,16 @@ function signIn(){
     
     let sEmail = document.getElementById("sEmail").value;
     let sPwd = document.getElementById("sPwd").value;
-    console.log('sEmail: ', sEmail);
-    console.log('sPwd: ', sPwd);
+    if (sEmail == "" || spwd == "") {
+        return swal("Please Fill up all the required Fields !", "")
+        
+    }
     
     allUsers = JSON.parse(localStorage.getItem("allUsers"))
     if(allUsers == null){
-        return alert("No User Exist ! Please Signup first.")
+      return  swal("No User Exist ! Please Signup first." , "", "error");    
+       
+
     }
    
    //signin authentication
@@ -71,11 +93,12 @@ function signIn(){
         localStorage.setItem("currentUser", JSON.stringify(currentUser))
             window.location = "./main.html"
         }else{
-            alert("Pasword is Incorrect !")
+            swal("Pasword is Incorrect !" , "", "error")
         }
 
     }else{
-        alert("No user Exist with this email")
+            swal("No user Exist with this email" , "", "error")
+            
     }
 
 }
@@ -87,7 +110,7 @@ function addCat(){
     let currentUser = JSON.parse(localStorage.getItem("currentUser")) 
     let category = document.getElementById('cat').value;
     if(category == ""){
-        return alert("Please fill up the required Field !")
+        return swal("Please fill up the required Field !", "");
     }
     let catArr = {
         catID,
@@ -104,7 +127,8 @@ function addCat(){
         localStorage.setItem("allCategories", JSON.stringify(allCategories))
     }
     document.getElementById('cat').value = ""
-    alert("Category Added !")
+        return swal("Category Added", "", "success");
+        
     
 
 
@@ -113,25 +137,94 @@ function addCat(){
 function renderOptions(){
     let currentUserObj = JSON.parse(localStorage.getItem("currentUser"))
     let allCategories = JSON.parse(localStorage.getItem("allCategories")) 
-    let currentUserCat = allCategories.filter(a=> currentUserObj.userID == a.userID)
-if(currentUserCat){
-    // console.log('currentUserCat: ', currentUserCat[2].category);
-    console.log("redering Cat");
+    let currentUserCat;
+    if (allCategories) {
+        currentUserCat = allCategories.filter(a=> currentUserObj.userID == a.userID)  
+          if(currentUserCat){
     let selectCat = document.getElementById("cat");
-    console.log('selectCat: ', selectCat);
     for(let i=0; i<currentUserCat.length; i++){
         selectCat.innerHTML += `
             <option value=${currentUserCat[i].category}>${currentUserCat[i].category}</option>
             `
     }
+}
 }else{
-    alert("Add Category First !")
+        return swal("Add Category First", "");
+
 }
 }
     
-
+function getId(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id")
+    return id
+}
+function addExpBtn(){
+    let allCategories = JSON.parse(localStorage.getItem("allCategories"))
+    console.log('allCategories: ', allCategories);
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    // if (allCategories) {
+        
+    // }
+    let currentUserCat = allCategories.filter(i=> currentUser.userID == i.userID)
+    let arrLength = currentUserCat.length
+    if (arrLength == 0) {
+       return  swal("Category Added", "", "success");
+        
+    }else{
+        window.location = "./addExp.html"
+    }
+}
                     //add Expenses
 function addExpenses(){
+       
+    let id = getId()
+    if(id){
+updateExp(id)
+    }else{
+        addExp()
+    }
+
+    
+}
+function updateExp(id){
+    let des = document.getElementById('des').value;
+    let amount = document.getElementById('amount').value;
+    let cat = document.getElementById('cat').value;
+
+    if(des == "" || amount == "" || cat == ""){
+        return swal("Please Fill up all the required Fields !", "");
+
+    }
+
+
+    let allExpenses = JSON.parse(localStorage.getItem("allExpenses"));
+
+    allExpenses = allExpenses.map(v => {
+        if (v.expID == id) {
+            v.des =des
+            v.amount =amount
+            v.cat =cat
+            return v
+        } else  {
+            return v
+
+        }
+    })
+
+    localStorage.setItem('allExpenses',JSON.stringify(allExpenses))
+
+
+    swal("Expenese Updated !", "", "success");
+
+    document.getElementById('des').value = "";
+    document.getElementById('amount').value = "";
+    document.getElementById('cat').value = "";
+    
+
+}
+function addExp(){
+    
     let d = new Date()
     let month = d.getMonth()+1
     let date = d.getDate() + "/" + month + "/" + d.getFullYear()
@@ -143,7 +236,9 @@ function addExpenses(){
     let cat = document.getElementById('cat').value;
 
     if(des == "" || amount == "" || cat == ""){
-        return alert("Please Fill up all the required Fields !")
+        return swal("Please Fill up all the required Fields !", "");
+
+
     }
 
     let user = JSON.parse(localStorage.getItem("currentUser")) 
@@ -172,14 +267,14 @@ function addExpenses(){
    }
    
 
-    alert("Expenses Added !!")
+   swal("Expense Added !", "", "success");
+
     document.getElementById('des').value = "";
     document.getElementById('amount').value = "";
     document.getElementById('cat').value = "";
     
 
 }
-
                 //////   Logout ////
 
 function logout(){
@@ -190,12 +285,15 @@ function logout(){
 
 
 
-function renderTable(){
+function renderTable(arr){
     let currentUser = JSON.parse(localStorage.getItem("currentUser"))
     let table = document.getElementById("tableData")
     let allExpenses = JSON.parse(localStorage.getItem("allExpenses"))
     let currentUserExp = allExpenses.filter(a=> currentUser.userID == a.userID)
 
+    if (arr) {
+        currentUserExp = arr        
+    }
     currentUserExp.map(val=>{
         const {expID, des, amount, cat, date} = val
         table.innerHTML += `
@@ -216,35 +314,45 @@ function renderTable(){
 
 function renderUserName(){
     let currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    document.getElementById("welcome").innerHTML = `Welcome ${currentUser.userName}`
+    let name = currentUser.userName
+    document.getElementById("welcome").innerHTML = `Welcome ${name.toUpperCase()} !`
+    
 }
 
-function uptadeExpense(currentExpID){
+ function uptadeExpense(currentExpID){
+    window.location =  `addExp.html?id=${currentExpID}`;
+}
+function editExpense(){
+    let id = getId()
     let allExpenses = JSON.parse(localStorage.getItem("allExpenses")) 
-    let currentExpObj = allExpenses.find(i=> i.expID == currentExpID)
+    let currentExpObj = allExpenses.find(i=> i.expID == id)
     console.log('currentExpObj: ', currentExpObj);
     
-    let index = allExpenses.findIndex(i=> i.expID == currentExpID)
+    // let index = allExpenses.findIndex(i=> i.expID == currentExpID)
+    if(id){
     
-    // window.location = "addExp.html"
-
-    let p = document.getElementById('des')
-    console.log('p: ', p);
-    // document.getElementById('des').value = currentExpObj.des
-    // console.log('currentExpObj.des: ', currentExpObj.des);
-    // document.getElementById('amount').value = currentExpObj.amount
-    // document.getElementById('cat').value = currentExpObj.cat
-
+    document.getElementById('des').value = currentExpObj.des
+    document.getElementById('amount').value = currentExpObj.amount
+    document.getElementById('cat').value = currentExpObj.cat
+    document.getElementById('add_btn').innerHTML = "Update"
+    document.getElementById('exp_heading').innerHTML = "Edit Expense"
+}else{
+    //do nothing
+}
 }
 
 function deleteExpense(currentExpID){
+    currentExpID = parseInt(currentExpID)
     let allExpenses = JSON.parse(localStorage.getItem("allExpenses")) 
-    let index = allExpenses.findIndex(i=> i.expID == currentExpID)
-    allExpenses.splice(index, 1);
+    let updatedExp = allExpenses.filter(v => v.expID !== currentExpID )
 
-    if(index !== -1){
-        let updatedExpenses = JSON.stringify(allExpenses)
-        localStorage.setItem("allExpenses", updatedExpenses)
-        location.reload()
-    }
+    // localStorage.setItem("allExpenses", JSON.stringify(updatedExp) )
+    // let index = allExpenses.findIndex(i=> i.expID == currentExpID)
+    // allExpenses.splice(index, 1);
+
+    // if(index !== -1){
+    //     let updatedExpenses = JSON.stringify(allExpenses)
+    //     localStorage.setItem("allExpenses", updatedExpenses)
+    //     location.reload()
+    // }
 }

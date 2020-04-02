@@ -8,6 +8,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <style>
         .table-data{
             font-weight: 400;
@@ -22,15 +24,15 @@
     <div class="container-fluid p-5 mx-auto bg-primary text-white text-center">
 <h2 class="pt-5">Welcome to Expense Management System</h2>
     </div>
-    <div class="container pt-5 text-center" >
+    <div class="container pt-3 text-center" >
         <h1>All Expenses</h1>
         <button type="button" class="btn btn-secondary  "><a href="./addExp.html" class="text-white">Add Expense</a></button>
-        <button type="button" class="btn btn-secondary "><a href="./addCat.html" class="text-white">Add Categories</a></button>
-        <button type="button" class="btn btn-secondary ">Generate Report</button> <br>
-        <div class="row">
+        <button type="button" class="btn btn-secondary "><a href="./addCat.html" class="text-white">Add Category</a></button>
+        <!-- <button type="button" class="btn btn-secondary ">Generate Report</button> <br> -->
+        <div class="row mb-3 mt-2">
             <div class="col-md-4"></div>
         <div class="col-md-4">
-        <input type="text" class="form-control mt-1" placeholder="Search By Category...">
+        <input type="text" class="form-control mt-1" placeholder="Search By Category..." oninput="search(this.value)">
 
         </div>
         </div>    
@@ -51,6 +53,7 @@
             
         </tbody>
     </table>
+    <div id=errMsg style="text-align: center;"></div>
     </div>
     
 </body>
