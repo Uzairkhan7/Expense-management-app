@@ -140,13 +140,17 @@ function renderOptions(){
     let currentUserCat;
     if (allCategories) {
         currentUserCat = allCategories.filter(a=> currentUserObj.userID == a.userID)  
-          if(currentUserCat){
+         let currentUserCatlength = currentUserCat.length
+        if(currentUserCatlength !== 0){
     let selectCat = document.getElementById("cat");
     for(let i=0; i<currentUserCat.length; i++){
         selectCat.innerHTML += `
             <option value=${currentUserCat[i].category}>${currentUserCat[i].category}</option>
             `
     }
+}else{
+    console.log("else1");
+    return swal("Add Category First", "");
 }
 }else{
         return swal("Add Category First", "");
